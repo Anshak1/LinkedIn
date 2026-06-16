@@ -12,7 +12,7 @@ import { authDataContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export function TopBar2() {
-  let { userData } = useContext(userDataContext)
+  let { userData, setUserData } = useContext(userDataContext)
   let { serverUrl } = useContext(authDataContext)
   let [frontendProfileImg, setFrontendProfileImg] = useState(userData ? userData.profileImage : dp)
   let [loading, setLoading] = useState(false)
