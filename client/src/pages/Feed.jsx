@@ -51,10 +51,12 @@ const Feed = () => {
     //   </div>
     // </div>
 
-    <div className='px-10'>
+    <div className='px-10 bg-[#F4F2EE] min-h-screen py-px'>
+
       <TopBar2/>
       {edit && <EditProfile />}
-      <h1 className='text-2xl font-bold mb-1 mt-4'>Welcome to the Feed, <span className='font-bold text-[#0077B6]'>{userData ? userData.lastName : 'Guest'}!</span></h1>
+
+      <h1 className='text-2xl font-bold mb-1 mt-14'>Welcome to the Feed, <span className='font-bold text-[#0077B6]'>{userData ? userData.lastName : 'Guest'}!</span></h1>
       <p className='text-gray-600 mb-2'>Here's what's happening with your network.</p>
       <div className="flex items-center gap-3">
         <button onClick={handleLogout}

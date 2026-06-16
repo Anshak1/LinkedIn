@@ -5,11 +5,11 @@ import { useNavigate } from "react-router-dom";
 
 export function TopBar() {
     const navigate = useNavigate()
-    return <div className="flex items-center justify-between h-16 md:h-20 px-4 sm:px-8 md:px-16 lg:px-40 bg-white">
+    return <div className="flex items-center justify-between h-16 md:h-20 px-4 md:px-16 lg:px-30 bg-white">
         <div className="flex items-center gap-4">
             <img 
                 src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScsfY4ztnbhoAI-TUGV7csHBL5w4TjF40Gdg&s" 
-                alt="LinkedIn" className="h-10 md:h-14 cursor-pointer" onClick={() => navigate('/')} 
+                alt="LinkedIn" className="h-12 md:h-16 cursor-pointer" onClick={() => navigate('/')} 
             />
         </div>
         

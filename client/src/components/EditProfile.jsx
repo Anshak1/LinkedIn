@@ -106,11 +106,11 @@ const EditProfile = () => {
 
       <div className="w-full h-full bg-black opacity-[0.7] absolute"></div>
       <div onClick={() => setEdit(false)}
-        className="absolute top-6 right-8">
+        className="absolute top-16 md:top-16 right-4 md:right-8 z-600">
         <X className='font-bold cursor-pointer bg-white rounded-full p-1 w-7 h-7' size={20} />
       </div>
 
-      <div className="bg-white w-[90%] max-w-150 h-150 shadow-xl rounded-2xl absolute z-200 p-2 overflow-auto hide-scrollbar">
+      <div className="bg-white w-[90%] max-w-150 h-150 shadow-xl rounded-2xl absolute mt-20 md:mt-0 z-200 p-2 overflow-auto hide-scrollbar">
         {/* Cover Image */}
         <div className="w-full h-38 bg-gray-500 rounded-lg overflow-hidden">
           <img src={frontendCoverImg} alt="" className="w-full h-full bg-cover rounded" />

@@ -4,12 +4,12 @@ export function Leftside() {
   const navigate = useNavigate();
   return (
     <div className="w-full md:w-3/4 lg:w-[55%] px-4 md:px-0">
-      <h1 className="text-2xl md:text-4xl lg:text-[56px] leading-tighter">
+      <h1 className="text-3xl md:text-4xl lg:text-[56px] leading-tighter">
         Find jobs, connections, insights and more to grow your career
       </h1>
 
       <div className="mt-8 flex flex-col gap-4">
-        <button className="cursor-pointer w-full md:w-3/4 h-14 border border-gray-400 rounded-full flex items-center justify-center gap-3 hover:bg-gray-100">
+        <button className="cursor-pointer w-full md:w-3/4 h-12 md:h-14 border border-gray-400 rounded-full flex items-center justify-center gap-3 hover:bg-gray-100">
           <img
             src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
             alt="Google"
@@ -19,7 +19,7 @@ export function Leftside() {
         </button>
 
         <button onClick={() => navigate('/login')}
-          className="cursor-pointer w-full md:w-3/4 h-14 rounded-full border border-gray-500 text-gray-700 font-semibold hover:bg-gray-100">
+          className="cursor-pointer w-full md:w-3/4 h-12 md:h-14 rounded-full border border-gray-500 text-gray-700 font-semibold hover:bg-gray-100">
           Sign in with Email
         </button>
       </div>

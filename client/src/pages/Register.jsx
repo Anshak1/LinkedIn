@@ -44,21 +44,21 @@ export default function Register() {
 
   return (
     <div className="min-h-screen">
-      <div className="px-10 py-4 cursor-pointer" onClick={() => navigate('/')}>
+      <div className="px-4 md:px-10 py-2 md:py-4 cursor-pointer" onClick={() => navigate('/')}>
         <img
           src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScsfY4ztnbhoAI-TUGV7csHBL5w4TjF40Gdg&s"
           alt="LinkedIn"
-          className="h-14"
+          className="h-12 md:h-14"
         />
       </div>
 
       {/* Heading */}
-      <h1 className="text-4xl md:text-5xl text-center font-light mb-4 md:mb-6">
+      <h1 className="text-2xl md:text-5xl text-center font-light mb-0 mt-2 md:mb-6">
         Join LinkedIn now — it's free!
       </h1>
 
       <div className="max-w-md mx-auto md:shadow-xl p-10 rounded-2xl border-none md:border-2 md:border-gray-200">
-        <form action="" className="flex flex-col gap-4" onSubmit={handleRegister}>
+        <form action="" className="flex flex-col gap-2 md:gap-4" onSubmit={handleRegister}>
           {/* Name */}
           <div className="w-full flex items-center gap-3">
             <input
