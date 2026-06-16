@@ -13,9 +13,10 @@ import { TopBar2 } from '../components/TopBar2'
 // import { PostCard } from '../components/PostCard'
 import EditProfile from '../components/EditProfile'
 import dp from '../assets/dp.jpg'
+import CreatePost from '../components/CreatePost'
 
 const Feed = () => {
-  const { userData, setUserData, edit, setEdit } = useContext(userDataContext)
+  const { userData, setUserData, edit, setEdit, startPost, setStartPost } = useContext(userDataContext)
   let { serverUrl } = useContext(authDataContext)
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
@@ -37,44 +38,12 @@ const Feed = () => {
   }
 
   return (
-    // <div className='bg-amber-50'>
-    //   <TopBar2/>
-    //   <div className='grid grid-cols-1 md:grid-cols-12 gap-6 max-w-7xl mx-auto px-4 md:px-8 mt-6'>
-    //     <div className='md:col-span-3'>
-    //       <ProfileCard name={"Anshak"} title={"Full Stack Developer"} address={"Cooch Behar"} banner={"https://media.licdn.com/dms/image/v2/D5616AQHfnbmv7e3Q8A/profile-displaybackgroundimage-shrink_350_1400/profile-displaybackgroundimage-shrink_350_1400/0/1733593298188?e=1782950400&v=beta&t=A3zBWAfA7yMPbGoEwd7Ubme0E-SdHdjzdotf8e4Ehn8"} profilePic={"https://media.licdn.com/dms/image/v2/D5603AQGellffH2dxtA/profile-displayphoto-shrink_800_800/B56ZOiMHBbGoAg-/0/1733592905315?e=1782950400&v=beta&t=bSBm1M90-76a74KfC0SwkxlHUIqoOaHEnk9Uxfgnq7Y"}/>
-    //       {/* <Analytics/>
-    //       <Settings/> */}
-    //     </div>
-    //     <div className="md:col-span-6">
-    //       <PostCard/>
-    //       <CreatePostCard/>
-    //     </div>
-    //     <div className='hidden md:block md:col-span-3'>
-    //       <News/>
-    //     </div>
-    //   </div>
-    // </div>
-
     <div className='px-2 md:px-10 bg-[#F4F2EE] min-h-screen w-full flex flex-col lg:flex-row items-start justify-center gap-5 pt-14 lg:pt-20'>
 
       <TopBar2 />
       {edit && <EditProfile />}
 
-      {/* <h1 className='text-2xl font-bold mb-1 mt-14'>Welcome to the Feed, <span className='font-bold text-[#0077B6]'>{userData ? userData.lastName : 'Guest'}!</span></h1>
-      <p className='text-gray-600 mb-2'>Here's what's happening with your network.</p>
-      <div className="flex items-center gap-3">
-        <button onClick={handleLogout}
-          className='bg-red-500 text-white py-2 px-4 rounded-xl hover:bg-red-600 cursor-pointer'>
-          {loading ? <Loader2 className='animate-spin' size={20} /> : 'Logout'}
-        </button>
-        <button onClick={() => setEdit(true)}
-          className='bg-blue-500 text-white py-2 px-4 rounded-xl hover:bg-blue-600 cursor-pointer'>
-          {loading ? <Loader2 className='animate-spin' size={20} /> : 'Edit Profile'}
-        </button>
-      </div> */}
-
-
-      <div className="w-full md:w-[25%] min-h-50 bg-white shadow-lg rounded-lg relative pb-2">
+      <div className="w-full md:w-[25%] min-h-50 bg-white shadow-sm rounded-lg relative pb-2">
         {/* Cover Image */}
         <div className="w-full h-28 bg-gray-500 rounded-t-lg overflow-hidden">
           <img src={frontendCoverImg} alt="" className="w-full h-full bg-cover rounded" />
@@ -98,8 +67,20 @@ const Feed = () => {
 
       </div>
 
-      <div className="w-full md:w-[50%] min-h-50 bg-white shadow-lg rounded-lg p-2">posts</div>
-      <div className="w-full md:w-[25%] min-h-50 bg-white shadow-lg rounded-lg p-2">news or connections</div>
+      {startPost && <CreatePost />}
+      <div className="w-full md:w-[50%] min-h-50 bg-[#F4F2EE] rounded-lg p-1">
+        <div className="flex items-center justify-center gap-4 w-full bg-white px-2 py-4 rounded-lg shadow-sm">
+          <div className="h-14 w-14 rounded-full">
+            <img src={frontendProfileImg} alt="" className="w-full h-full bg-cover rounded-full" />
+          </div>
+          <button onClick={() => setStartPost(true)} 
+            className="w-3/4 border border-blue-500 text-blue-500 hover:bg-blue-500/10 py-3 px-8 rounded-full cursor-pointer flex items-center justify-start">
+            Start a post
+          </button>
+        </div>
+      </div>
+
+      <div className="w-full md:w-[25%] min-h-50 bg-white shadow-sm rounded-lg p-2">news or connections</div>
 
 
     </div>
