@@ -12,14 +12,15 @@ import { TopBar2 } from '../components/TopBar2'
 // import { ProfileCard } from '../components/ProfileCard'
 // import { PostCard } from '../components/PostCard'
 import EditProfile from '../components/EditProfile'
+import dp from '../assets/dp.jpg'
 
 const Feed = () => {
   const { userData, setUserData, edit, setEdit } = useContext(userDataContext)
   let { serverUrl } = useContext(authDataContext)
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
-  let [frontendProfileImg, setFrontendProfileImg] = useState(userData ? userData.profileImage : dp)
-  let [frontendCoverImg, setFrontendCoverImg] = useState(userData ? userData.coverImage : '')
+  const frontendProfileImg = userData?.profileImage || dp
+  const frontendCoverImg = userData?.coverImage || ''
 
   const handleLogout = async () => {
     setLoading(true)
@@ -34,6 +35,7 @@ const Feed = () => {
       setLoading(false)
     }
   }
+
   return (
     // <div className='bg-amber-50'>
     //   <TopBar2/>
@@ -83,9 +85,11 @@ const Feed = () => {
           <img src={frontendProfileImg} alt="" className="w-full h-full bg-cover rounded-full" />
         </div>
 
-        <h1 className="mt-10 ml-4 font-semibold">{userData.firstName + ' ' + userData.lastName}</h1>
-        <p className="ml-4 text-base text-gray-600">{userData.headline}</p>
-        <p className="ml-4 text-base text-gray-600">{userData.education[0].college + ', ' + userData.location}</p>
+        <h1 className="mt-10 ml-4 font-semibold">{userData?.firstName ? `${userData.firstName} ${userData.lastName}` : 'Loading...'}</h1>
+        <p className="ml-4 text-base text-gray-600">{userData?.headline ?? 'No headline yet'}</p>
+        <p className="ml-4 text-base text-gray-600">
+          {userData?.education?.[0]?.college ? `${userData.education[0].college}, ${userData.location ?? ''}` : 'Education not provided'}
+        </p>
 
         <button onClick={() => setEdit(true)}
           className='mt-4 ml-8 w-3/4 border border-blue-500 text-blue-500 hover:bg-blue-500/10 py-1.5 px-4 rounded-full cursor-pointer flex items-center justify-center'>

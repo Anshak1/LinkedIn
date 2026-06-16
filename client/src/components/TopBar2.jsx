@@ -4,6 +4,7 @@ import { TopELementWIthDrop } from "../components/TopElementWIthDrop";
 import { TopELement2 } from "./TopElement2";
 import { SearchBox } from "./SearchBox";
 import linkedInLogo from '../assets/linkedLogo.webp'
+import dp from '../assets/dp.jpg'
 
 import { Bell, BriefcaseBusiness, CircleUserRound, Grid3x3, Home, MessageCircle, Workflow } from "lucide-react";
 import { userDataContext } from "../context/UserContext";
@@ -14,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 export function TopBar2() {
   let { userData, setUserData } = useContext(userDataContext)
   let { serverUrl } = useContext(authDataContext)
-  let [frontendProfileImg, setFrontendProfileImg] = useState(userData ? userData.profileImage : dp)
+  const frontendProfileImg = userData?.profileImage || dp
   let [loading, setLoading] = useState(false)
   let [showProfile, setShowProfile] = useState(false)
   const navigate = useNavigate()
