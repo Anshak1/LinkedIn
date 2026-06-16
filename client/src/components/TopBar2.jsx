@@ -9,6 +9,7 @@ import { Bell, BriefcaseBusiness, CircleUserRound, Grid3x3, Home, MessageCircle,
 import { userDataContext } from "../context/UserContext";
 import axios from "axios";
 import { authDataContext } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export function TopBar2() {
   let { userData } = useContext(userDataContext)
@@ -16,6 +17,7 @@ export function TopBar2() {
   let [frontendProfileImg, setFrontendProfileImg] = useState(userData ? userData.profileImage : dp)
   let [loading, setLoading] = useState(false)
   let [showProfile, setShowProfile] = useState(false)
+  const navigate = useNavigate
 
   const handleLogout = async () => {
     setLoading(true)
