@@ -37,7 +37,7 @@ const UserContext = ({ children }) => {
     fetchAllPosts()
   }, []);
 
-  let value = {userData, setUserData, edit, setEdit, startPost, setStartPost}
+  let value = {userData, setUserData, edit, setEdit, startPost, setStartPost, posts, setPosts, fetchAllPosts}
 
   return (
     <div>

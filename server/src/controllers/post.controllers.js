@@ -4,12 +4,15 @@ import uploadOnCloudinary from '../config/cloudinary.js'
 export const createPost = async (req, res) => {
   try {
     let {description} = req.body
-    let newPost;
-    if(req.file) {
-      let image = await uploadOnCloudinary(req.file.path)
-      newPost = await Post.create({author: req.userId, description, image})
-    } else newPost = await Post.create({author: req.userId, description})
+    let newPost = await Post.create({author: req.userId, description})
 
+    if (req.file) {
+      let image = await uploadOnCloudinary(req.file.path)
+      newPost.image = image
+      await newPost.save()
+    }
+
+    await newPost.populate({ path: 'author', select: '-password' })
     return res.status(201).json(newPost)
   } catch (error) {
     return res.status(500).json({message: 'server error!'})
@@ -19,8 +22,52 @@ export const createPost = async (req, res) => {
 export const getAllPost = async (req, res) => {
   try {
     let posts = await Post.find()
+    .populate({ path: 'author', select: '-password' })
+    .populate({
+      path: 'comment.user',
+      select: 'firstName lastName profileImage headline'
+    }).sort({createdAt: -1})
     return res.status(200).json(posts)
   } catch (error) {
     return res.status(500).json({message: 'server error!'})
+  }
+}
+
+export const like = async (req, res) => {
+  try {
+    let postId = req.params.id
+    let userId = req.userId
+
+    let post = await Post.findById(postId)
+    if(!post) return res.status(400).json({message: 'post not found!'})
+    
+    if(post.like.includes(userId)) {
+      post.like = post.like.filter((id) => id != userId)
+    } else post.like.push(userId)
+
+    await post.save()
+    return res.status(200).json(post)
+  } catch (error) {
+    return res.status(500).json({message: 'like error!'})
+  }
+}
+
+export const comment = async (req, res) => {
+  try {
+    let postId = req.params.id
+    let userId = req.userId
+    let {content} = req.body
+    
+    let post = await Post.findByIdAndUpdate(postId, {
+      $push: {comment: {content, user: userId}}
+    }, {new: true}).populate({
+      path: 'comment.user',
+      select: 'firstName lastName profileImage headline'
+    }).sort({updatedAt: -1})
+
+    await post.save()
+    return res.status(200).json(post)
+  } catch (error) {
+    return res.status(500).json({message: 'comment error!'})
   }
 }
