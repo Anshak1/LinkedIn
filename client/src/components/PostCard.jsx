@@ -1,10 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react'
 import dp from '../assets/dp.jpg'
-import { Heart, HeartPlus, LucideKey, MessageCircle, Plus, Send, SendHorizonal } from 'lucide-react'
+import { Heart, HeartPlus, MessageCircle, Send, SendHorizonal } from 'lucide-react'
 import moment from 'moment'
 import axios from 'axios'
 import { authDataContext } from '../context/AuthContext'
 import { userDataContext } from '../context/UserContext'
+import { io } from "socket.io-client";
+import ConnectionBtn from './ConnectionBtn'
+
+const socket = io("http://localhost:8000");
 
 const PostCard = ({ post }) => {
     let author = post.author
@@ -25,6 +29,21 @@ const PostCard = ({ post }) => {
             console.log(error)
         }
     }
+
+    useEffect(() => {
+        socket.on("likeUpdated", ({postId, likes}) => {
+            if(postId == post._id) setLikes(likes)
+        });
+
+        socket.on("commentUpdated", ({postId, comments}) => {
+            if(postId == post._id) setComments(comments)
+        });
+
+        return () => {
+            socket.off('likeUpdated')
+            socket.off('commentUpdated')
+        }
+    }, [post._id])
 
     useEffect(() => {
         fetchAllPosts()
@@ -56,9 +75,7 @@ const PostCard = ({ post }) => {
                     </div>
                 </div>
                 <div className="">
-                    <button className="flex gap-1 items-center px-2 py-1 text-lg rounded bg-white hover:bg-blue-500/10 cursor-pointer">
-                        <Plus size={20} className='text-blue-500 font-semibold' /> Connect
-                    </button>
+                    {userData._id != author._id && <ConnectionBtn postAuthorId={author._id}/>}
                 </div>
             </div>
 
@@ -110,9 +127,7 @@ const PostCard = ({ post }) => {
                                     </div>
                                 </div>
                                 <div className="">
-                                    <button className="flex gap-1 items-center px-2 py-1 text-sm rounded bg-white hover:bg-blue-500/10 cursor-pointer">
-                                        <Plus size={20} className='text-blue-500 font-semibold' /> Connect
-                                    </button>
+                                    {userData._id != c.user._id && <ConnectionBtn postAuthorId={author._id}/>}
                                 </div>
                             </div>
                             <div className="text-sm p-1 ml-8">{c.content}</div>

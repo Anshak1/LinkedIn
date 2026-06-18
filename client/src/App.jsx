@@ -6,6 +6,8 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 import { userDataContext } from './context/UserContext'
 import Feed from './pages/Feed'
+import Network from './components/Network'
+import Profile from './components/Profile'
 
 function App() {
   const userData = useContext(userDataContext).userData
@@ -13,6 +15,8 @@ function App() {
     <Routes>
       <Route path='/' element={<Home />}/>
       <Route path='/feed' element={userData ? <Feed /> : <Navigate to="/login" />}/>
+      <Route path='/network' element={userData ? <Network /> : <Navigate to="/login" />}/>
+      <Route path='/profile' element={userData ? <Profile /> : <Navigate to="/login" />}/>
       {/* <Route path='/feed' element={<Feed />}/> */}
       <Route path='/login' element={userData ? <Navigate to="/feed" /> : <Login/>}/>
       <Route path='/register' element={userData ? <Navigate to="/feed" /> : <Register/>}/>

@@ -6,7 +6,7 @@ import { SearchBox } from "./SearchBox";
 import linkedInLogo from '../assets/linkedLogo.webp'
 import dp from '../assets/dp.jpg'
 
-import { Bell, BriefcaseBusiness, CircleUserRound, Grid3x3, Home, MessageCircle, Workflow } from "lucide-react";
+import { Bell, BriefcaseBusiness, CircleUserRound, Grid3x3, Home, Loader2, MessageCircle, Workflow } from "lucide-react";
 import { userDataContext } from "../context/UserContext";
 import axios from "axios";
 import { authDataContext } from "../context/AuthContext";
@@ -41,8 +41,9 @@ export function TopBar2() {
         {/* Left Section */}
         <div className="flex items-center gap-1 md:gap-2">
           <img
+            onClick={() => navigate('/feed')}
             src={linkedInLogo} alt="LinkedIn"
-            className="h-14 w-auto"
+            className="h-14 w-auto cursor-pointer"
           />
           <SearchBox />
         </div>
@@ -53,12 +54,14 @@ export function TopBar2() {
             title="Home"
             icon={<Home size={22} />}
             flag='false'
+            onClick={() => navigate('/feed')}
           />
 
           <TopELement2
             title="My Network"
             icon={<Workflow size={22} />}
             flag='false'
+            onClick={() => navigate('/network')}
           />
 
           <TopELement2
@@ -88,11 +91,12 @@ export function TopBar2() {
                 <img src={frontendProfileImg} alt="" className="w-full h-full bg-cover rounded-full" />
               </div>
               <h1 className="">{userData.firstName + ' ' + userData.lastName}</h1>
-              <button className='border border-blue-500 text-blue-500 hover:bg-blue-500/10 py-1.5 w-3/4 px-4 rounded-full cursor-pointer flex items-center justify-center'>
+              <button onClick={() => navigate('/profile')}
+                className='border border-blue-500 text-blue-500 hover:bg-blue-500/10 py-1.5 w-3/4 px-4 rounded-full cursor-pointer flex items-center justify-center'>
                 View Profile
               </button>
               <div className="h-px bg-gray-300 w-full"></div>
-              <div className="flex gap-3 text-sm sm:text-base w-3/4 rounded-full hover:bg-blue-500/10 py-2 px-4 cursor-pointer"><Workflow size={22} /> My Networks</div>
+              <div className="flex gap-3 text-sm sm:text-base w-3/4 rounded-full hover:bg-blue-500/10 py-2 px-4 cursor-pointer" onClick={() => navigate('/network')}><Workflow size={22} /> My Networks</div>
               <div className="flex gap-3 text-sm sm:text-base w-3/4 rounded-full hover:bg-blue-500/10 py-2 px-4 cursor-pointer"><BriefcaseBusiness size={22} /> Jobs</div>
               <button onClick={handleLogout}
                 className='border border-red-500 text-red-500 hover:bg-red-500/10 py-1.5 w-3/4 px-4 rounded-full cursor-pointer flex items-center justify-center'>
