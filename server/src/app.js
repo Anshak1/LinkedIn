@@ -17,7 +17,7 @@ const app = express();
 const server = http.createServer(app)
 export const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
+    origin: "https://linkedin-client-pe4j.onrender.com",
     credentials: true,
   },
 });
@@ -39,7 +39,7 @@ io.on("connection", (socket) => {
 });
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "https://linkedin-client-pe4j.onrender.com",
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
