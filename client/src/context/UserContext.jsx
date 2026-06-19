@@ -32,7 +32,7 @@ const UserContext = ({ children }) => {
       setPosts(res.data)
     } catch (error) {
       console.error('Error fetching all posts:', error);
-      setPosts(null); // Set post Data to null if there's an error fetching data
+      setPosts([]); // Reset to empty array if there's an error fetching data
     }
   }
 

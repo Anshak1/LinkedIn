@@ -123,7 +123,7 @@ const Feed = () => {
 
         {/* Post Card */}
         <div className="flex flex-col gap-4 min-h-screen">
-          {posts.map((post, i) => (
+          {Array.isArray(posts) && posts.map((post, i) => (
             <PostCard key={i} post={post} />
           ))}
         </div>
