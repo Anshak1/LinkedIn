@@ -32,7 +32,7 @@ export default function Login() {
             setUserData(res.data.user)
             navigate('/feed')
         } catch (error) {
-            setError(error.response.data.message)
+            setError(error.response?.data?.message || error.message || 'Login failed')
             setLoading(false)
         }
     }

@@ -15,9 +15,10 @@ import notificationRouter from "./routes/notification.routes.js";
 const app = express();
 
 const server = http.createServer(app)
+const clientOrigin = process.env.CLIENT_BASE_URL || "http://localhost:5173";
 export const io = new Server(server, {
   cors: {
-    origin: process.env.CLIENT_BASE_URL,
+    origin: clientOrigin,
     credentials: true,
   },
 });
@@ -39,7 +40,7 @@ io.on("connection", (socket) => {
 });
 
 app.use(cors({
-  origin: "https://linkedin-client-pe4j.onrender.com",
+  origin: clientOrigin,
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
