@@ -4,19 +4,24 @@ dotenv.config();
 
 const isAuth = async (req, res, next) => {
   try {
-    const token = req.cookies.token;
-    // console.log("Token from cookies:", token);
+    // Try cookie first, then Authorization header (Bearer token)
+    let token = req.cookies?.token;
+    if (!token) {
+      const authHeader = req.headers?.authorization || req.headers?.Authorization;
+      if (authHeader && authHeader.startsWith('Bearer ')) {
+        token = authHeader.split(' ')[1];
+      }
+    }
+
     if (!token) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    //console.log("JWT_SECRET from env:", process.env.JWT_SECRET);
     let verifyToken = jwt.verify(token, process.env.JWT_SECRET); // decoded token
     if (!verifyToken) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    //console.log("verifyToken:", verifyToken);
     req.userId = verifyToken.id;
     next();
   } catch (error) {

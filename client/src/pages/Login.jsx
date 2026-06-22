@@ -6,6 +6,7 @@ import { authDataContext } from '../context/AuthContext'
 import { userDataContext } from '../context/UserContext'
 import axios from 'axios'
 import { Loader2 } from "lucide-react";
+import { GoogleLogin } from "@react-oauth/google";
 
 export default function Login() {
     const navigate = useNavigate();
@@ -38,6 +39,21 @@ export default function Login() {
         }
     }
 
+    const handleSuccess = async (credentialResponse) => {
+        try {
+            const res = await axios.post(
+                `${serverUrl}/api/auth/google`,
+                { credential: credentialResponse.credential },
+                { withCredentials: true }
+            )
+            localStorage.setItem("token", res.data.token)
+            setUserData(res.data.user)
+            await Promise.all([fetchUserData(), fetchAllPosts()])
+            navigate('/feed')
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <div className="min-h-screen">
@@ -64,7 +80,7 @@ export default function Login() {
                 </div>
 
                 <form action="" className="flex flex-col gap-4" onSubmit={handleLogin}>
-                    
+
                     {/* Email */}
                     <input
                         type="email" value={email}
@@ -87,7 +103,7 @@ export default function Login() {
                     </div>
 
                     <div className="flex items-center justify-end px-2 -mt-3">
-                        <h3 onClick={() => navigate('/forget-password')} 
+                        <h3 onClick={() => navigate('/forget-password')}
                             className="text-blue-500 hover:underline cursor-pointer text-sm">
                             Forget Password?
                         </h3>
@@ -117,6 +133,23 @@ export default function Login() {
                         className="w-full h-12 bg-[#0A66C2] rounded-full text-white font-medium hover:bg-[#004182] mt-2 cursor-pointer flex items-center justify-center gap-2">
                         {loading ? <Loader2 className="animate-spin" size={20} /> : "Sign in"}
                     </button>
+
+                    {/* Divider */}
+                    <div className="flex items-center gap-4">
+                        <div className="h-px flex-1 bg-gray-300"></div>
+                        <span className="text-gray-500">or</span>
+                        <div className="h-px flex-1 bg-gray-300"></div>
+                    </div>
+
+                    {/* Google Button */}
+                    <div className="w-full h-12 border-none flex items-center justify-center">
+                        <GoogleLogin
+                            onSuccess={handleSuccess}
+                            onError={() => console.log('Login Failed!')}
+                            text="signin_with"
+                            width={300} shape="pill" size="large"
+                        />
+                    </div>
 
                 </form>
 

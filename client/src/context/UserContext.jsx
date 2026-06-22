@@ -19,6 +19,12 @@ const UserContext = ({ children }) => {
 
   const fetchUserData = async () => {
     try {
+      const token = localStorage.getItem('token');
+      if (token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      } else {
+        delete axios.defaults.headers.common['Authorization'];
+      }
       const res = await axios.get(`${serverUrl}/api/user/current-user`, { withCredentials: true });
       setUserData(res.data);
     } catch (error) {
@@ -31,6 +37,8 @@ const UserContext = ({ children }) => {
 
   const fetchAllPosts = async () => {
     try {
+      const token = localStorage.getItem('token');
+      if (token) axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       const res = await axios.get(`${serverUrl}/api/post/get-all`, { withCredentials: true })
       setPosts(res.data)
     } catch (error) {

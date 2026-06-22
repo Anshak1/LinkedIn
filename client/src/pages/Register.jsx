@@ -2,15 +2,16 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useContext } from "react";
-import {authDataContext} from '../context/AuthContext'
+import { authDataContext } from '../context/AuthContext'
 import axios from 'axios'
 import { Loader2 } from "lucide-react";
 import { userDataContext } from '../context/UserContext'
+import { GoogleLogin } from "@react-oauth/google";
 
 export default function Register() {
-  const { setUserData } = useContext(userDataContext)
+  const { setUserData, fetchUserData, fetchAllPosts } = useContext(userDataContext)
   const navigate = useNavigate();
-  let {serverUrl} = useContext(authDataContext)
+  let { serverUrl } = useContext(authDataContext)
   const [showPassword, setShowPassword] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -26,7 +27,7 @@ export default function Register() {
     try {
       let res = await axios.post(serverUrl + '/api/auth/register', {
         firstName, lastName, username, email, password
-      }, {withCredentials: true})
+      }, { withCredentials: true })
       console.log(res.data)
       setLoading(false)
       setFirstName("")
@@ -41,13 +42,21 @@ export default function Register() {
     }
   }
 
-  // const handleGoogleLogin = async () => {
-  //   try {
-      
-  //   } catch (error) {
-      
-  //   }
-  // }
+  const handleSuccess = async (credentialResponse) => {
+    try {
+      const res = await axios.post(
+        `${serverUrl}/api/auth/google`,
+        { credential: credentialResponse.credential },
+        { withCredentials: true }
+      )
+      localStorage.setItem("token", res.data.token)
+      setUserData(res.data.user)
+      await Promise.all([fetchUserData(), fetchAllPosts()])
+      navigate('/feed')
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div className="min-h-screen">
@@ -69,14 +78,14 @@ export default function Register() {
           {/* Name */}
           <div className="w-full flex items-center gap-3">
             <input
-              type="text" value={firstName} 
+              type="text" value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
               placeholder="First Name"
               className="w-1/2 border p-3 rounded"
             />
 
             <input
-              type="text" value={lastName} 
+              type="text" value={lastName}
               onChange={(e) => setLastName(e.target.value)}
               placeholder="Last Name"
               className="w-1/2 border p-3 rounded min-w-0"
@@ -93,7 +102,7 @@ export default function Register() {
 
           {/* Email */}
           <input
-            type="email" value={email} 
+            type="email" value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
             className="border p-3 rounded"
@@ -128,7 +137,7 @@ export default function Register() {
             </span>
             .
           </p>
-          
+
           {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
           {/* Register Button */}
@@ -145,18 +154,14 @@ export default function Register() {
           </div>
 
           {/* Google Button */}
-          <button
-            // onClick={handleGoogleLogin}
-            type="button"
-            className="w-full h-12 border rounded-full flex items-center justify-center gap-3 hover:bg-gray-50 cursor-pointer"
-          >
-            <img
-              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-              alt="Google"
-              className="h-5"
+          <div className="w-full h-12 border-none flex items-center justify-center">
+            <GoogleLogin 
+              onSuccess={handleSuccess} 
+              onError={() => console.log('Login Failed!')} 
+              text="continue_with"
+              width={300} shape="pill" size="large"
             />
-            Continue with Google
-          </button>
+          </div>
 
           {/* Sign In */}
           <p className="text-center">

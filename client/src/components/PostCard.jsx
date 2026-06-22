@@ -74,14 +74,13 @@ const PostCard = ({ post }) => {
                     </div>
                     <div className="">
                         <h1 className="text-lg font-semibold">{author.firstName + ' ' + author.lastName}</h1>
-                        <h3 className="text-gray-600 text-base -mt-1">{author.headline}</h3>
+                        <h3 className="text-gray-600 text-base -mt-1">{author.headline.slice(0,20)}{author.headline.length > 20 ? '...' : ''}</h3>
                         <p className="text-xs -mt-1">{moment(post.createdAt).fromNow()}</p>
                     </div>
                 </Link>
                 <div className="">
                     {location.pathname !== '/feed' && userData._id === author._id ? <PostDeleteBtn postId={post._id} /> : null}
                     {location.pathname === '/feed' && userData._id !== author._id ? <ConnectionBtn postAuthorId={author._id} /> : null}
-                    {location.pathname !== '/feed' && userData._id !== author._id ? <ConnectionBtn postAuthorId={author._id} /> : null}
                 </div>
             </div>
 
@@ -122,7 +121,7 @@ const PostCard = ({ post }) => {
                     {comments.map((c, i) => (
                         <div key={i} className="flex flex-col gap-1 mt-4 border-b border-b-gray-400 rounded-lg">
                             <div className="flex items-start justify-between px-1">
-                                <div className="flex gap-2 items-start cursor-pointer" onClick={() => handleGetProfile(author.username)}>
+                                <Link to={`/profile/${c.user?.username}`} className="flex gap-2 items-start cursor-pointer" onClick={() => handleGetProfile(author.username)}>
                                     <div className="h-10 w-10 rounded-full">
                                         <img src={c.user?.profileImage || dp} alt="" className="w-full h-full object-cover object-center rounded-full" />
                                     </div>
@@ -131,7 +130,7 @@ const PostCard = ({ post }) => {
                                         {/* <h3 className="text-gray-600 text-sm -mt-1">{c.user?.headline}</h3> */}
                                         <p className="text-xs -mt-1">{moment(c.createdAt).fromNow()}</p>
                                     </div>
-                                </div>
+                                </Link>
                                 <div className="">
                                     {userData._id != c.user._id && <ConnectionBtn postAuthorId={author._id}/>}
                                 </div>

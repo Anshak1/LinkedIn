@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 import { sendResetPasswordEmail, sendVerificationEmail } from "../utils/sendEmail.js";
+import { OAuth2Client } from 'google-auth-library'
 
 export const register = async (req, res) => {
   try {
@@ -263,3 +264,72 @@ export const resetPassword = async (req, res) => {
     });
   }
 };
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+export const googleLogin = async (req, res) => {
+  const { credential } = req.body;
+  if (!credential) {
+    return res.status(400).json({ message: 'No credential provided' });
+  }
+  try {
+    // Verify the id_token Google sent to the frontend
+    const ticket = await client.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+
+    const { sub, email, name, picture } = ticket.getPayload();
+
+    let user = await User.findOne({ $or: [{ googleId: sub }, { email }] });
+
+    if (user) {
+      if (!user.googleId) {
+        user.googleId = sub;
+      }
+      user.email = email;
+      await user.save();
+    } else {
+      const usernameFromEmail = email.split('@')[0];
+      const username = `${usernameFromEmail}_${Date.now()}`;
+      user = await User.create({
+        firstName: name,
+        username,
+        email,
+        profileImage: picture,
+        googleId: sub,
+      });
+    }
+
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      process.env.JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'none',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
+    const safeUser = {
+      id: user._id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      username: user.username,
+      email: user.email,
+      profileImage: user.profileImage,
+    };
+
+    res.status(200).json({ user: safeUser, token });
+
+  } catch (err) {
+    console.error('Google token verification failed:', err);
+    res.status(500).json({ message: 'Invalid Google token' });
+  }
+}
+
+export const getMe = (req, res) => {
+  return res.status(200).json(req.userId)
+}

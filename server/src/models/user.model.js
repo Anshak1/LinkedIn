@@ -5,7 +5,7 @@ const userSchema = new mongoose.Schema({
   lastName: {type: String, required: true},
   username: {type: String, required: true, unique: true},
   email: {type: String, required: true, unique: true},
-  password: {type: String, required: true},
+  password: {type: String, required: function() { return !this.googleId; }},
   profileImage: {type: String, default: ''},
   coverImage: {type: String, default: ''},
   headline: {type: String, default: ''},
@@ -21,7 +21,8 @@ const userSchema = new mongoose.Schema({
   verifyToken: { type: String, required: false, },
   verifyTokenExpires: { type: Date },
   resetPasswordToken: {type: String},
-  resetPasswordExpires: {type: Date}
+  resetPasswordExpires: {type: Date},
+  googleId: { type: String, unique: true, sparse: true }
 }, {timestamps: true});
 
 const User = mongoose.model("User", userSchema);
