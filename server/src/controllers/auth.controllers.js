@@ -1,6 +1,8 @@
 import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
+import { sendVerificationEmail } from "../utils/sendEmail.js";
 
 export const register = async (req, res) => {
   try {
@@ -23,7 +25,7 @@ export const register = async (req, res) => {
     }
 
     // Check if user already exists
-    const existingUser = await User.findOne({ email });
+    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
 
     if (existingUser) {
       return res.status(409).json({
@@ -39,6 +41,16 @@ export const register = async (req, res) => {
     const user = await User.create({
       firstName, lastName, username, email, password: hashedPassword
     });
+
+    // generate verification token
+    const verifyToken = crypto.randomBytes(32).toString("hex");
+    user.verifyToken = verifyToken;
+    user.verifyTokenExpires = Date.now() + 24 * 60 * 60 * 1000;
+
+    // send email here
+    const verificationUrl = `${process.env.CLIENT_BASE_URL}/verify-email/${verifyToken}`;
+    await sendVerificationEmail(user.email, verificationUrl);
+    await user.save();
 
     // Generate JWT
     const token = jwt.sign(
@@ -154,4 +166,22 @@ export const logout = (req, res) => {
     success: true,
     message: "User logged out successfully."
   });
+};
+
+export const verifyEmail = async (req, res) => {
+  try {
+    const { verifyToken } = req.params;
+    const user = await User.findOne({ verifyToken: token });
+
+    if (!user)
+      return res.status(400).json({message: "Invalid token"});
+
+    user.isVerified = true;
+    user.verificationToken = undefined;
+
+    await user.save();
+    res.status(200).json({message: "Email verified"});
+  } catch (error) {
+    res.status(200).json({ message: `Email verification error: ${error}`});
+  }
 };

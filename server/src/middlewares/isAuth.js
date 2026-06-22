@@ -11,7 +11,7 @@ const isAuth = async (req, res, next) => {
     }
 
     //console.log("JWT_SECRET from env:", process.env.JWT_SECRET);
-    let verifyToken = jwt.verify(token, process.env.JWT_SECRET);
+    let verifyToken = jwt.verify(token, process.env.JWT_SECRET); // decoded token
     if (!verifyToken) {
       return res.status(401).json({ message: "Unauthorized" });
     }

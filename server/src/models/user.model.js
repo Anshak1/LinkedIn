@@ -14,7 +14,12 @@ const userSchema = new mongoose.Schema({
   location: {type: String, default: 'India'},
   gender: {type: String, enum: ['male', 'female', 'other']},
   experience: [{title: {type: String}, company: {type: String}, description: {type: String}}],
-  connection: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
+  connection: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+  resetPasswordToken: { type: String },
+  resetPasswordExpires: { type: Date },
+  isVerified: { type: Boolean, default: false },
+  verifyToken: { type: String, required: false, },
+  verifyTokenExpires: { type: Date },
 }, {timestamps: true});
 
 const User = mongoose.model("User", userSchema);
