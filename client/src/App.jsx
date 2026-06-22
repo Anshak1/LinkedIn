@@ -13,6 +13,7 @@ import MyPosts from './components/MyPosts'
 import Notification from './pages/Notification'
 import Messaging from './pages/Messaging'
 import Jobs from './pages/Jobs'
+import CheckEmail from './components/CheckEmail'
 
 function App() {
   const userData = useContext(userDataContext).userData
@@ -31,6 +32,7 @@ function App() {
       <Route path='/register' element={userData ? <Navigate to="/feed" /> : <Register />} />
       <Route path='/my-posts' element={userData ? <MyPosts /> : <Navigate to="/login" />} />
       <Route path="/verify-email/:verifyToken" element={<VerifyEmail />} />
+      <Route path="/check-email" element={<CheckEmailEmail />} />
     </Routes>
   </div>
 }

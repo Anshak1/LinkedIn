@@ -35,7 +35,7 @@ export default function Register() {
       setEmail("")
       setPassword("")
       setUserData(res.data.user)
-      navigate('/feed')
+      navigate('/check-email')
     } catch (error) {
       setError(error.response.data.message)
       setLoading(false)
